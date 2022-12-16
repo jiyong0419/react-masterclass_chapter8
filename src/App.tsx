@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { motion, useMotionValue } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 const Wrapper = styled.div`
@@ -24,12 +24,8 @@ const Box = styled(motion.div)`
 
 function App() {
   const xValue = useMotionValue(0);
-  // xValue는 모션컴포넌트의 수치를 추적한다
-  useEffect(() => {
-    xValue.onChange(() => {
-      console.log(xValue.get());
-    });
-  }, [xValue]);
+  const scale = useTransform(xValue, [-800, 0, 800], [2, 1, 0.1]);
+
   return (
     <Wrapper>
       <div>
@@ -41,7 +37,7 @@ function App() {
           move Box 200px
         </button>
       </div>
-      <Box style={{ x: xValue }} drag />
+      <Box style={{ x: xValue, scale: scale }} drag="x" dragSnapToOrigin />
     </Wrapper>
   );
 }
