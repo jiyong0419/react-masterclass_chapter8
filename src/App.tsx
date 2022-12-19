@@ -11,62 +11,47 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
 `;
 
-const Box = styled(motion.div)`
-  width: 400px;
-  height: 200px;
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 40px;
-  position: absolute;
-  top: 100px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+const Box = styled.div`
+  width: 300px;
+  height: 300px;
+  background-color: #fff;
+  display: flex;
+  margin-bottom: 10px;
+`;
+
+const Circle = styled(motion.div)`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: rgba(230, 88, 88, 0.788);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px;
 `;
 
-const boxVariants = {
-  start: (back: boolean) => ({ x: back ? -200 : 200, opacity: 0, scale: 0 }),
-  end: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.5 },
-  },
-  exit: (back: boolean) => ({
-    x: back ? 200 : -200,
-    opacity: 0,
-    scale: 0,
-    transition: { duration: 0.5 },
-  }),
-};
 function App() {
-  const [value, setValue] = useState(1);
-  const [back, setBack] = useState(false);
-  const onClickNextBtn = () => {
-    setBack(false);
-    setValue((value) => (value === 10 ? 10 : value + 1));
-  };
-  const onClickPrevBtn = () => {
-    setBack(true);
-    setValue((value) => (value === 1 ? 1 : value - 1));
+  const [click, setClick] = useState(false);
+  const onClick = () => {
+    setClick((prev) => !prev);
   };
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       <AnimatePresence>
         <Box
-          custom={back}
-          variants={boxVariants}
-          initial="start"
-          animate="end"
-          exit="exit"
-          key={value}
+          style={{
+            justifyContent: click ? "center" : "flex-start",
+            alignItems: click ? "center" : "flex-start",
+          }}
         >
-          {value}
+          <Circle layout>layout</Circle>
+        </Box>
+        <Box style={{ justifyContent: "center", alignItems: "center" }}>
+          {click ? <Circle layoutId="circle">layoutId</Circle> : null}
+        </Box>
+        <Box style={{ justifyContent: "center", alignItems: "center" }}>
+          {!click ? <Circle layoutId="circle">layoutId</Circle> : null}
         </Box>
       </AnimatePresence>
-      <button onClick={onClickNextBtn}>next</button>
-      <button onClick={onClickPrevBtn}>prev</button>
     </Wrapper>
   );
 }
