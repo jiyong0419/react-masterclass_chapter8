@@ -35,18 +35,19 @@ const boxVariants = {
     x: 0,
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.2 },
+    transition: { duration: 0.5 },
   },
   exit: {
     x: -200,
     opacity: 0,
     scale: 0,
-    transition: { duration: 0.2 },
+    transition: { duration: 0.5 },
   },
 };
 function App() {
   const [count, setCount] = useState(1);
   const onClickNextBtn = () => setCount((i) => (i === 10 ? 10 : i + 1));
+  const onClickPrevBtn = () => setCount((i) => (i === 1 ? 1 : i - 1));
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
     <Wrapper>
@@ -66,6 +67,7 @@ function App() {
         )}
       </AnimatePresence>
       <button onClick={onClickNextBtn}>next</button>
+      <button onClick={onClickPrevBtn}>prev</button>
     </Wrapper>
   );
 }
