@@ -26,45 +26,44 @@ const Box = styled(motion.div)`
 `;
 
 const boxVariants = {
-  start: {
-    x: 200,
-    opacity: 0,
-    scale: 0,
-  },
+  start: (back: boolean) => ({ x: back ? -200 : 200, opacity: 0, scale: 0 }),
   end: {
     x: 0,
     opacity: 1,
     scale: 1,
     transition: { duration: 0.5 },
   },
-  exit: {
-    x: -200,
+  exit: (back: boolean) => ({
+    x: back ? 200 : -200,
     opacity: 0,
     scale: 0,
     transition: { duration: 0.5 },
-  },
+  }),
 };
 function App() {
-  const [count, setCount] = useState(1);
-  const onClickNextBtn = () => setCount((i) => (i === 10 ? 10 : i + 1));
-  const onClickPrevBtn = () => setCount((i) => (i === 1 ? 1 : i - 1));
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [value, setValue] = useState(1);
+  const [back, setBack] = useState(false);
+  const onClickNextBtn = () => {
+    setBack(false);
+    setValue((value) => (value === 10 ? 10 : value + 1));
+  };
+  const onClickPrevBtn = () => {
+    setBack(true);
+    setValue((value) => (value === 1 ? 1 : value - 1));
+  };
   return (
     <Wrapper>
       <AnimatePresence>
-        {arr.map((i) =>
-          i === count ? (
-            <Box
-              variants={boxVariants}
-              initial="start"
-              animate="end"
-              exit="exit"
-              key={i}
-            >
-              {i}
-            </Box>
-          ) : null
-        )}
+        <Box
+          custom={back}
+          variants={boxVariants}
+          initial="start"
+          animate="end"
+          exit="exit"
+          key={value}
+        >
+          {value}
+        </Box>
       </AnimatePresence>
       <button onClick={onClickNextBtn}>next</button>
       <button onClick={onClickPrevBtn}>prev</button>
