@@ -8,49 +8,62 @@ const Wrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
 `;
-
-const Box = styled.div`
-  width: 300px;
-  height: 300px;
-  background-color: #fff;
-  display: flex;
-  margin-bottom: 10px;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 50vw;
+  gap: 10px;
+  div:first-child,
+  div:last-child {
+    grid-column: span 2;
+  }
 `;
-
-const Circle = styled(motion.div)`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: rgba(230, 88, 88, 0.788);
+const Box = styled(motion.div)`
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 40px;
+  height: 200px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
+const Overlay = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const overlay = {
+  start: { backgroundColor: "rgba(0, 0, 0, 0)" },
+  end: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+  exit: { backgroundColor: "rgba(0, 0, 0, 0)" },
+};
 function App() {
-  const [click, setClick] = useState(false);
-  const onClick = () => {
-    setClick((prev) => !prev);
-  };
+  const [id, setId] = useState<null | string>(null);
   return (
-    <Wrapper onClick={onClick}>
+    <Wrapper>
+      <Grid>
+        {["1", "2", "3", "4", "5", "6", "7"].map((n) => (
+          <Box onClick={() => setId(n)} key={n} layoutId={n}>
+            {n}
+          </Box>
+        ))}
+      </Grid>
       <AnimatePresence>
-        <Box
-          style={{
-            justifyContent: click ? "center" : "flex-start",
-            alignItems: click ? "center" : "flex-start",
-          }}
-        >
-          <Circle layout>layout</Circle>
-        </Box>
-        <Box style={{ justifyContent: "center", alignItems: "center" }}>
-          {click ? <Circle layoutId="circle">layoutId</Circle> : null}
-        </Box>
-        <Box style={{ justifyContent: "center", alignItems: "center" }}>
-          {!click ? <Circle layoutId="circle">layoutId</Circle> : null}
-        </Box>
+        {id ? (
+          <Overlay
+            variants={overlay}
+            onClick={() => setId(null)}
+            initial="start"
+            animate="end"
+            exit="exit"
+          >
+            <Box layoutId={id} style={{ width: 400, height: 200 }} />
+          </Overlay>
+        ) : null}
       </AnimatePresence>
     </Wrapper>
   );
